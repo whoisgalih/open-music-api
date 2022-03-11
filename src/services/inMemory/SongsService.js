@@ -8,7 +8,7 @@ class SongsService {
   }
 
   // eslint-disable-next-line object-curly-newline
-  addSong({ title, year, performer, genre, duration }) {
+  addSong({ title, year, performer, genre, duration, albumId }) {
     const id = `song-${nanoid(16)}`;
     const createdAt = new Date().toISOString();
     const updatedAt = createdAt;
@@ -20,6 +20,7 @@ class SongsService {
       genre,
       duration,
       id,
+      albumId,
       createdAt,
       updatedAt,
     };
@@ -36,11 +37,12 @@ class SongsService {
   }
 
   getSongs() {
-    return this._songs.map((song) => ({
-      id: song.id,
-      title: song.title,
-      performer: song.performer,
-    }));
+    return this._songs;
+    // return this._songs.map((song) => ({
+    //   id: song.id,
+    //   title: song.title,
+    //   performer: song.performer,
+    // }));
   }
 
   getSongById(id) {
@@ -52,7 +54,7 @@ class SongsService {
   }
 
   // eslint-disable-next-line object-curly-newline
-  editSongById(id, { title, year, performer, genre, duration }) {
+  editSongById(id, { title, year, performer, genre, duration, albumId }) {
     const index = this._songs.findIndex((song) => song.id === id);
 
     if (index === -1) {
@@ -67,6 +69,7 @@ class SongsService {
       year,
       performer,
       genre,
+      albumId,
       duration,
       updatedAt,
     };
