@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
-/* eslint-disable object-curly-newline */
 /* eslint-disable camelcase */
-// eslint-disable-next-line object-curly-newline
-const albumMapDBToModel = ({ id, name, year, created_at, updated_at }) => ({
+const albumMapDBToModel = ({
+  id, name, year, created_at, updated_at,
+}) => ({
   id,
   name,
   year,
@@ -10,7 +9,9 @@ const albumMapDBToModel = ({ id, name, year, created_at, updated_at }) => ({
   updatedAt: updated_at,
 });
 
-const songMapDBToModel = ({ id, title, year, performer, genre, duration, album_id, created_at, updated_at }) => ({
+const songMapDBToModel = ({
+  id, title, year, performer, genre, duration, album_id, created_at, updated_at,
+}) => ({
   id,
   title,
   year,

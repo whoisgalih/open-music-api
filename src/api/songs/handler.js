@@ -6,7 +6,7 @@ class SongsHandler {
     this._validator = validator;
 
     this.postSongHandler = this.postSongHandler.bind(this);
-    this.getSongsHandler = this.getSongsHandler.bind(this); // Masih belum ada dalam test
+    this.getSongsHandler = this.getSongsHandler.bind(this);
     this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
     this.putSongByIdHandler = this.putSongByIdHandler.bind(this);
     this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
@@ -15,8 +15,9 @@ class SongsHandler {
   async postSongHandler(request, h) {
     try {
       this._validator.validateSongPayload(request.payload);
-      // eslint-disable-next-line object-curly-newline
-      const { title, year, performer, genre, duration, albumId } = request.payload;
+      const {
+        title, year, performer, genre, duration, albumId,
+      } = request.payload;
 
       const songId = await this._service.addSong({
         title,
@@ -59,9 +60,6 @@ class SongsHandler {
 
   async getSongsHandler(request, h) {
     const { title, performer } = request.query;
-
-    console.log(title);
-    console.log(performer);
 
     const songs = await this._service.getSongs(title, performer);
     const response = h.response({
