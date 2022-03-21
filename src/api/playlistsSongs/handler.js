@@ -1,8 +1,11 @@
+/* eslint-disable max-len */
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistsSongsHandler {
-  constructor(playlistsSongsService, songsService, validator) {
+  constructor(playlistsSongsService, playlistsActivitiesService, playlistsVerifyService, songsService, validator) {
     this._playlistsSongsService = playlistsSongsService;
+    this._playlistsActivitiesService = playlistsActivitiesService;
+    this._playlistsVerifyService = playlistsVerifyService;
     this._songsService = songsService;
     this._validator = validator;
 
@@ -18,9 +21,11 @@ class PlaylistsSongsHandler {
       const { songId } = request.payload;
       const { id: credentialId } = request.auth.credentials;
 
-      await this._playlistsSongsService.verifyPlaylistAccess(playlistId, credentialId);
+      // await this._playlistsSongsService.verifyPlaylistAccess(playlistId, credentialId);
+      await this._playlistsVerifyService.verifyPlaylistAccess(playlistId, credentialId);
       await this._songsService.getSongById(songId);
       await this._playlistsSongsService.addSongToPlaylist({ songId, playlistId });
+      await this._playlistsActivitiesService.addActivities(playlistId, songId, credentialId, 'add');
 
       const response = h.response({
         status: 'success',
@@ -93,6 +98,7 @@ class PlaylistsSongsHandler {
 
       await this._playlistsSongsService.verifyPlaylistAccess(playlistId, credentialId);
       await this._playlistsSongsService.deleteSongInPlaylistById(songId, playlistId);
+      await this._playlistsActivitiesService.addActivities(playlistId, songId, credentialId, 'delete');
 
       return {
         status: 'success',
