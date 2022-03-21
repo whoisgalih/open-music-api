@@ -35,13 +35,19 @@ const playlistsSongs = require('./api/playlistsSongs');
 const PlaylistsSongsService = require('./services/postgres/PlaylistsSongsService');
 const PlaylistsSongsValidator = require('./validator/playlistsSongs');
 
+// collaborations
+const collaborations = require('./api/collaborations');
+const CollaborationsService = require('./services/postgres/CollaborationsService');
+const CollaborationsValidator = require('./validator/collaborations');
+
 const init = async () => {
   const albumsService = new AlbumsService();
   const songsService = new SongsService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
+  const collaborationsService = new CollaborationsService();
   const playlistsService = new PlaylistsService();
-  const playlistsSongsService = new PlaylistsSongsService();
+  const playlistsSongsService = new PlaylistsSongsService(collaborationsService);
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -61,7 +67,7 @@ const init = async () => {
   ]);
 
   // mendefinisikan strategy autentikasi jwt
-  server.auth.strategy('notesapp_jwt', 'jwt', {
+  server.auth.strategy('openmusicapi_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {
       aud: false,
@@ -121,6 +127,15 @@ const init = async () => {
         playlistsSongsService,
         songsService,
         validator: PlaylistsSongsValidator,
+      },
+    },
+    {
+      plugin: collaborations,
+      options: {
+        collaborationsService,
+        playlistsService,
+        usersService,
+        validator: CollaborationsValidator,
       },
     },
   ]);

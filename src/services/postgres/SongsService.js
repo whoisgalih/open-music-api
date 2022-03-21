@@ -3,13 +3,14 @@ const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
-const { songMapDBToModel, allSongMapDBToModel } = require('../../utils');
+const { songMapDBToModel } = require('../../utils');
 
 class SongsService {
   constructor() {
     this._pool = new Pool();
   }
 
+  // prettier-ignore
   async addSong({
     title, year, performer, genre, duration = 0, albumId = null,
   }) {
@@ -33,29 +34,29 @@ class SongsService {
 
   async getSongs(title, performer) {
     let query = {
-      text: 'SELECT * FROM songs',
+      text: 'SELECT id, title, performer FROM songs',
       values: [],
     };
 
     if (title !== undefined && performer !== undefined) {
       query = {
-        text: 'SELECT * FROM songs WHERE LOWER(title) LIKE $1 AND LOWER(performer) LIKE $2',
+        text: 'SELECT id, title, performer FROM songs WHERE LOWER(title) LIKE $1 AND LOWER(performer) LIKE $2',
         values: [`%${title}%`, `%${performer}%`],
       };
     } else if (title !== undefined) {
       query = {
-        text: 'SELECT * FROM songs WHERE LOWER(title) LIKE LOWER($1)',
+        text: 'SELECT id, title, performer FROM songs WHERE LOWER(title) LIKE LOWER($1)',
         values: [`%${title}%`],
       };
     } else if (performer !== undefined) {
       query = {
-        text: 'SELECT * FROM songs WHERE LOWER(performer) LIKE LOWER($1)',
+        text: 'SELECT id, title, performer FROM songs WHERE LOWER(performer) LIKE LOWER($1)',
         values: [`%${performer}%`],
       };
     }
 
     const result = await this._pool.query(query);
-    return result.rows.map(allSongMapDBToModel);
+    return result.rows;
   }
 
   async getSongById(id) {
@@ -72,6 +73,7 @@ class SongsService {
     return result.rows.map(songMapDBToModel)[0];
   }
 
+  // prettier-ignore
   async editSongById(id, {
     title, year, performer, genre, duration, albumId,
   }) {
