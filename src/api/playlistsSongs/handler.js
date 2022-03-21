@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistsSongsHandler {

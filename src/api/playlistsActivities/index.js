@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const PlaylistsHandler = require('./handler');
 const routes = require('./routes');
 

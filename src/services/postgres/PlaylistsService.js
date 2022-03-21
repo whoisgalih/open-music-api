@@ -2,7 +2,6 @@ const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 const PlaylistsVerifyService = require('./PlaylistsVerifyService');
-// const AuthorizationError = require('../../exceptions/AuthorizationError');
 
 class PlaylistsService extends PlaylistsVerifyService {
   async addPlaylist({ name, owner }) {

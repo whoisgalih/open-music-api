@@ -13,8 +13,10 @@ class PlaylistsActivitiesHandler {
       const { id: playlistId } = request.params;
 
       await this._playlistsActivitiesService.verifyPlaylistAccess(playlistId, credentialId);
-      // eslint-disable-next-line max-len
-      const activities = await this._playlistsActivitiesService.getActivitiesInPlaylists(playlistId);
+      // prettier-ignore
+      const activities = await this._playlistsActivitiesService.getActivitiesInPlaylists(
+        playlistId,
+      );
 
       return {
         status: 'success',
