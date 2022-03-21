@@ -1,9 +1,8 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistsActivitiesHandler {
-  constructor(playlistsActivitiesService, playlistsVerifyService) {
+  constructor(playlistsActivitiesService) {
     this._playlistsActivitiesService = playlistsActivitiesService;
-    this._playlistsVerifyService = playlistsVerifyService;
 
     this.getPlaylistActivitiesHandler = this.getPlaylistActivitiesHandler.bind(this);
   }
@@ -13,7 +12,7 @@ class PlaylistsActivitiesHandler {
       const { id: credentialId } = request.auth.credentials;
       const { id: playlistId } = request.params;
 
-      await this._playlistsVerifyService.verifyPlaylistAccess(playlistId, credentialId);
+      await this._playlistsActivitiesService.verifyPlaylistAccess(playlistId, credentialId);
       // eslint-disable-next-line max-len
       const activities = await this._playlistsActivitiesService.getActivitiesInPlaylists(playlistId);
 

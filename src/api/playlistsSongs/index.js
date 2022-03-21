@@ -9,7 +9,6 @@ module.exports = {
     {
       playlistsSongsService,
       playlistsActivitiesService,
-      playlistsVerifyService,
       songsService,
       validator,
     },
@@ -17,7 +16,6 @@ module.exports = {
     const playlistsHandler = new PlaylistsHandler(
       playlistsSongsService,
       playlistsActivitiesService,
-      playlistsVerifyService,
       songsService,
       validator,
     );

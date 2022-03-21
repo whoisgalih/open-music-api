@@ -1,13 +1,8 @@
-const { Pool } = require('pg');
-
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
+const PlaylistsVerifyService = require('./PlaylistsVerifyService');
 
-class PlaylistsActivitiesService {
-  constructor() {
-    this._pool = new Pool();
-  }
-
+class PlaylistsActivitiesService extends PlaylistsVerifyService {
   async getActivitiesInPlaylists(playlistId) {
     const activityQuery = {
       text: `SELECT users.username, songs.title, playlist_song_activities.action, playlist_song_activities.time

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 const ClientError = require('../../exceptions/ClientError');
 
@@ -21,7 +20,10 @@ class CollaborationsHandler {
 
       await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
       await this._usersService.getUserById(userId);
-      const collaborationId = await this._collaborationsService.addCollaboration(playlistId, userId);
+      // prettier-ignore
+      const collaborationId = await this._collaborationsService.addCollaboration(
+        playlistId, userId,
+      );
 
       const response = h.response({
         status: 'success',
