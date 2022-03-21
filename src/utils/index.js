@@ -10,15 +10,9 @@ const albumMapDBToModel = ({
 });
 
 const songMapDBToModel = ({
-  id, title, year, performer, genre, duration, album_id, created_at, updated_at,
+  created_at, updated_at, ...args
 }) => ({
-  id,
-  title,
-  year,
-  performer,
-  genre,
-  duration,
-  album_id,
+  ...args,
   createdAt: created_at,
   updatedAt: updated_at,
 });
