@@ -1,4 +1,4 @@
-// const path = require('path');
+const path = require('path');
 
 const routes = (handler) => [
   {
@@ -14,15 +14,15 @@ const routes = (handler) => [
       },
     },
   },
-  // {
-  //   method: 'GET',
-  //   path: '/upload/{param*}',
-  //   handler: {
-  //     directory: {
-  //       path: path.resolve(__dirname, 'file'),
-  //     },
-  //   },
-  // },
+  {
+    method: 'GET',
+    path: '/upload/{param*}',
+    handler: {
+      directory: {
+        path: path.resolve(__dirname, 'file'),
+      },
+    },
+  },
 ];
 
 module.exports = routes;
