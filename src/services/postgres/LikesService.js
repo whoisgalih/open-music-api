@@ -5,8 +5,9 @@ const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
 
 class LikesService {
-  constructor() {
+  constructor(cacheService) {
     this._pool = new Pool();
+    this._cacheService = cacheService;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -31,6 +32,8 @@ class LikesService {
         throw new InvariantError('Like gagal ditambahkan');
       }
 
+      await this._cacheService.delete('albums:likes');
+
       return 'Like berhasil ditambahkan';
     }
 
@@ -45,18 +48,28 @@ class LikesService {
       throw new InvariantError('Like gagal dihapus');
     }
 
+    await this._cacheService.delete('albums:likes');
+
     return 'Like berhasil dihapus';
   }
 
   async getLikes(albumId) {
-    const query = {
-      text: 'SELECT COUNT(*) FROM user_album_likes WHERE album_id = $1',
-      values: [albumId],
-    };
+    try {
+      const likes = await this._cacheService.get('albums:likes');
+      return { likes: parseInt(likes, 10), isFromCache: true };
+    } catch (error) {
+      const query = {
+        text: 'SELECT COUNT(*) FROM user_album_likes WHERE album_id = $1',
+        values: [albumId],
+      };
 
-    const result = await this._pool.query(query);
+      const result = await this._pool.query(query);
+      const likes = result.rows[0].count;
 
-    return parseInt(result.rows[0].count, 10);
+      await this._cacheService.set('albums:likes', likes);
+
+      return { likes: parseInt(likes, 10), isFromCache: false };
+    }
   }
 }
 

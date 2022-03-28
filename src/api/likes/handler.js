@@ -27,17 +27,25 @@ class LikesHandler {
     return response;
   }
 
-  async getLikesHandler(request) {
+  async getLikesHandler(request, h) {
     const { id: albumId } = request.params;
 
-    const likes = await this._likesService.getLikes(albumId);
+    const { likes, isFromCache } = await this._likesService.getLikes(albumId);
 
-    return {
+    const response = h.response({
       status: 'success',
       data: {
         likes,
       },
-    };
+    });
+
+    if (isFromCache) {
+      response.header('X-Data-Source', 'cache');
+    } else {
+      response.header('X-Data-Source', null);
+    }
+
+    return response;
   }
 }
 
